@@ -3,7 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { DEFAULT_SPEAKER, SPEAKERS } from "./constants";
-
+let blobUrl;
 function App() {
   const [showOverlay, setShowOverlay] = useState(false);
   const [ready, setReady] = useState(null);
@@ -13,7 +13,7 @@ function App() {
   // Create a reference to the worker object.
   const worker = useRef(null);
   const audio = useRef(null);
-  const [text, setText] = useState("I love Hugging Face!");
+  const [text, setText] = useState("");
 
   // We use the `useEffect` hook to setup the worker as soon as the `App` component is mounted.
   useEffect(() => {
@@ -61,7 +61,7 @@ function App() {
           // // Generation complete: re-enable the "Translate" button
           setDisabled(false);
           setShowOverlay(false);
-          const blobUrl = URL.createObjectURL(e.data.output);
+          blobUrl = URL.createObjectURL(e.data.output);
           audio.current.src = blobUrl;
           console.log("complete");
           audio.current.play();
@@ -96,19 +96,35 @@ function App() {
         <div className="content">
           <textarea
             onInput={(event) => {
+              console.log(event.target.value);
               setText(event.target.value);
             }}
-            value={`Utterify helps millions of teachers around the world save time and increase their productivity.
+            placeholder={`Utterify helps millions of teachers around the world save time and increase their productivity.
 
 Use it to grade essays, listen to papers, and get through reading materials much faster without any fatigue. It works everywhere you need it to - Google Docs, PDFs, MS Word and on any other website.`}
           ></textarea>
         </div>
         <div className="footer">
+          <button
+            className="download"
+            onClick={() => {
+              if (!blobUrl) return;
+              var a = document.createElement("a");
+              document.body.appendChild(a);
+              a.style = "display: none";
+              a.href = blobUrl;
+              a.download = `utterify.mp3`;
+              a.click();
+            }}
+          >
+            <span className="material-symbols-outlined">download</span>
+          </button>
           <button className="play-button" onClick={handleGenerateSpeech}>
             <span className="material-symbols-outlined play-icon">
               play_arrow
             </span>
           </button>
+
           <select
             id="speaker"
             className="border border-gray-300 rounded-md p-2 w-full"

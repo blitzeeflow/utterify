@@ -66,6 +66,17 @@ select {
   position: absolute;
   right: 20px;
 }
+.download {
+  background-color: transparent;
+  padding: 0;
+  margin-left: 20px;
+  position: absolute;
+  left: 20px;
+}
+.download span {
+  font-size: 60px;
+  color: #587393;
+}
 textarea {
   width: calc(100% - 40px);
   box-sizing: border-box;
